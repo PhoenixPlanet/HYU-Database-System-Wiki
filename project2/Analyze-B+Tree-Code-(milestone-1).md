@@ -1,6 +1,6 @@
 # B+ 트리란?
 
-![B+TREE](../uploads/85f52febc23c9e2a7d97425339cc8256/Shape_of_bplustree.png) </br> </br>
+![B+TREE](../uploads/project2/milestone1/Shape_of_bplustree.png) </br> </br>
 
 B+ 트리의 특징을 간단히 정리해보자면 아래와 같다.
 - 기본적으로 B-Tree와 모습이 유사한 Balanced Tree의 일종이다.  
@@ -13,7 +13,7 @@ B+ 트리의 특징을 간단히 정리해보자면 아래와 같다.
 
 # 1. Call Path
 ## A. insert
-<img src="../uploads/09f771815d3258cd084d05958b7221b8/insert_call_path.png" width="80%" height="80%">  
+<img src="../uploads/project2/milestone1/insert_call_path.png" width="80%" height="80%">  
 
 위 그림은 insert operation이 이루어질 때의 call path를 그림을 통해 나타낸 것이다. </br>
 1. 먼저 중복을 막기 위해서 삽입하고자 하는 값이 이미 트리에 있는지 확인 후, 없다면 삽입을 시작한다. 
@@ -24,7 +24,7 @@ B+ 트리의 특징을 간단히 정리해보자면 아래와 같다.
 5. 자리가 부족하다면 Split 후 삽입을 진행한다. 이 때 호출되는 함수 insert_into_leaf_after_splitting 의 자세한 내용과 call path에 대한 설명은 밑의 Split 과정 설명에서 하도록 하겠다. </br> </br>
 
 ## B. delete
-<img src="../uploads/62029432493cab5695806b71ad1389fa/delete.png" width="100%" height="100%">  
+<img src="../uploads/project2/milestone1/delete.png" width="100%" height="100%">  
 
 위 그림은 delete operation이 이루어질 때의 call path를 그림을 통해 나타낸 것이다. </br>
 1. 먼저 삭제하고자 하는 값과, 해당 키를 가진 Leaf 노드를 탐색하여 없는 경우는 바로 끝낸다.
@@ -38,12 +38,12 @@ B+ 트리의 특징을 간단히 정리해보자면 아래와 같다.
 
 # 2. Detail Flow
 ## A. Split
-<img src="../uploads/ae831f69c4bf519d862d1eb75fb22cfd/insert_after_split.png" width="70%" height="70%"> </br>
+<img src="../uploads/project2/milestone1/insert_after_split.png" width="70%" height="70%"> </br>
 
 위 그림은 Leaf node를 split 후 키를 insert하는 함수인 insert_into_leaf_after_splitting 의 call path를 나타낸 그림이다. </br>
 함수별로 살펴보면서 Split 하는 과정을 자세히 알아보자.
 - insert_into_leaf_after_splitting 함수  
-<img src="../uploads/8c1cbbaa5512b4b19729f5bc5e505ce6/Leaf_split.png" width="50%" height="50%"> </br>
+<img src="../uploads/project2/milestone1/Leaf_split.png" width="50%" height="50%"> </br>
 
 insert_into_leaf_after_splitting 함수에서는 위 그림($`order = 4`$인 경우)과 같이 원래의 키들과 새로 삽입할 키를 temp_keys와 temp_pointers에 일단 위치에 맞게 집어넣은 후, leaf 노드를 쪼개게 된다. </br>
 이후에 parent에 이를 반영해주기 위해 insert_into_parent 함수를 호출해주게 된다.
