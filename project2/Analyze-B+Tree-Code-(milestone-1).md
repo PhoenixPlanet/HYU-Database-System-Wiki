@@ -79,3 +79,48 @@ Merge 후에도 노드의 키 개수가 key의 가능한 최대 개수를 넘는
 
 2. 만약 제일 왼쪽 노드라면 오른쪽 노드의 가장 왼쪽 키 값을 가져온다.
 3. 이에 맞추어 parent에 반영해준다.
+</br></br>
+
+# 3. Naive designs or changes for on-disk B+ Tree  
+기본적으로 on-disk B+ Tree 에서의 Ineternal Page와 Leaf Page는 위 bpt.c에 구현되어있는 in-memory B+ Tree 에서의 node에 대응된다고 할 수 있다. 즉, root 노드가 있고, internal node가 root 노드, 또는 부모 internal node에 연결되어있고, 다시 leaf 노드가 연결되어 record들을 담고 있는 형태와 같이, root page, internal page, leaf page가 존재하는 것이다. 따라서 node 구조체를 page 구조에 맞춰 수정하여 사용하는 것이 필요할 것이다.
+</br>
+
+원래의 node 구조체는 아래와 같다.
+```c
+typedef struct node {
+    void ** pointers;
+    int * keys;
+    struct node * parent;
+    bool is_leaf;
+    int num_keys;
+    struct node * next; // Used for queue.
+} node;
+```
+아래는 internal page의 구조를 나타낸 그림이다.
+</br>
+<img src="../uploads/project2/milestone1/internal_page_layout.png" width="50%" height="50%">
+</br>
+
+internal page의 경우 key, page number(자식 노드를 가리키는 포인터) 쌍들이 있고,
+추가적으로 가장 왼쪽 자식을 가리키기 위한 One more page Number 자리가 있다. 기존에는 pointer[0] 자리에 가장 왼쪽 자식을 가리키는 포인터를 넣었지만, 이를 따로 빼주는 것이 좋을 것이다. 또한, 원래의 구조체에서는 * 포인터 연산자를 활용해 실제 포인터로 자식을 가리켰지만, 여기에서는 uint64_t 형식의 변수를 활용하여 page number를 가리키는 방식을 사용하여야 한다.
+
+</br>
+아래는 leaf page의 구조를 나타낸 그림이다.
+</br>
+<img src="../uploads/project2/milestone1/leaf_page_layout.png" width="50%" height="50%">
+</br>
+
+leaf page의 경우 key, Value(자식 노드를 가리키는 포인터) 쌍들이 있고,
+추가적으로 오른쪽 sibling node을 가리키기 위한 Right Sibling Page Number 자리가 있다.
+기존에는 pointer[order - 1] 자리에 오른쪽 형제 노드를 가리키는 포인터를 넣었지만, 이를 따로 빼주는 것이 좋을 것이다.
+
+</br>
+이외에도 free page, header page 등이 있는데, 이 페이지들 모두 같은 구조체로 표현할 수 있도록 구조체를 구성하는 것이 효율적일 것이다. 또한, 기존의 구조체에서는 key와 pointer를 서로 다른 배열로 관리했으나, page로 관리할 때는 이 둘이 쌍으로 이루므로, 이 둘 쌍을 새로운 구조체로 묶고 하나의 배열로 관리하는 것이 더 직관적일 것이다.
+</br> 
+또한, file manager api도 구현하여야 하는데, 이를 위해서 페이지들이 담겨있는 file을 위한 구조체도 따로 구성하는 것이 필요할 것이다.
+</br></br>
+이외에 leaf 페이지와 internal 페이지의 order가 각각 32, 248로 다르다는 점이 있는데, insert 또는 delete 시에 이를 고려해야할 것이다. 특히 split이나 merge 시에 key 개수의 최소 최대 조건이 달라질 수 있음을 고려하여 분기를 잘 구성해야 할 것이다.
+
+</br>
+또한, delayed merge를 구현해야하는데, 기존 코드에서는 삭제 후 최소 조건을 만족하지 못한다면 merge를 진행하였는데, 그렇지 않고, 노드에 아예 키가 존재하지 않을 때 merge를 진행, 즉 노드를 삭제하는 형식으로 진행하여야 한다.
+
