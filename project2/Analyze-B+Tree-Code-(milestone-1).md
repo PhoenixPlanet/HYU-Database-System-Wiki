@@ -96,7 +96,7 @@ typedef struct node {
     struct node * next; // Used for queue.
 } node;
 ```
-아래는 internal page의 구조를 나타낸 그림이다.
+아래는 internal page의 구조를 나타낸 그림이다.  
 </br>
 <img src="../uploads/project2/milestone1/internal_page_layout.png" width="50%" height="50%">
 </br>
@@ -106,7 +106,7 @@ internal page의 경우 key, page number(자식 노드를 가리키는 포인터
 
 </br>
 아래는 leaf page의 구조를 나타낸 그림이다.
-</br>
+</br></br>
 <img src="../uploads/project2/milestone1/leaf_page_layout.png" width="50%" height="50%">
 </br>
 
