@@ -35,7 +35,7 @@
 </br> </br>
 
 # file.h & file.cpp
-```C++
+```c++
 struct page_t {
     union page
     {
@@ -83,7 +83,7 @@ file_alloc_page, file_free_page, file_read_page, file_write_page는 명세에서
 
 # page.h & page.cpp
 실제로 index layer 단에서 쓸 수 있는 node_t 구조체를 정의하였다.
-``` C++
+```c++
 struct node_t {
     struct header {
         pagenum_t parent;
@@ -133,7 +133,14 @@ Insert의 경우 기존 bpt.c와 거의 비슷하게 구현하였다.
 키가 모두 삭제된 후 Merge를 진행한다는 것은 사실상 해당 노드를 삭제하는 것과 거의 같으므로 실제로도 삭제하는 것과 같이 구현하였다.  
 만약 키가 모두 삭제되어 머지되어야하는 노드가 가장 왼쪽 노드라면 해당 노드의 오른쪽 노드의 (키, 값) 또는 (키, 자식 Page number) 쌍 들을 모두 해당 노드로 옮겨준 후 오른쪽 노드를 삭제하였다.  
 이외의 경우는 그냥 해당 노드를 삭제하고, Internal 노드의 경우 B+Tree의 특성을 유지하기 위해 부모에서 키를 가져와 옆 노드 끝에 붙여주는 방식으로 진행하였다.  
+</br>
 아래 사진을 참고하자.
+<img src="../uploads/project2/milestone2/delete_leaf.png" width="100%" height="100%">
+</br>
+상황은 1부터 47까지 순서대로 넣은 후, 다시 1부터 15까지 삭제한 결과이다.  
+여기서 16을 삭제해볼 것이다.  
+pagenum을 잘 살펴보자.
+원래 root의 pagenum은 3이었고, 그 왼쪽 자식은 1이었음을 알 수 있다. 하지만 왼쪽 노드의 16이 사라지면서 Merge를 해주어야 할 필요성이 생겼고, 따라서 오른쪽 노드의 모든 값들을 왼쪽에게 옮기고 오른쪽 노드를 삭제해주면서, 원래 root노드가 삭제되고, 그 결과 원래 root의 왼쪽 자식 노드가 새로운 root가 된 모습을 확인할 수 있다. 
 </br> </br>
 하지만 해당 방식에는 문제가 있는데, 만약 Internal 노드의 경우 옆 노드에 더 이상 자리가 없다면 부모에서 키를 가져와 옆 노드 끝에 붙여주는 방식으로 Merge를 진행할 수 없다는 것이다. 이러한 경우에는 어쩔 수 없이 Redistribution을 진행해야한다고 판단하였다.  
 만약 키가 만약 키가 모두 삭제되어 머지되어야하는 노드가 왼쪽 노드라면 그 오른쪽 노드의 가장 왼쪽 자식, 즉 spare_page가 가리키는 자식을 해당 노드로 가져오는 방식으로 구현하였다.  
@@ -184,15 +191,15 @@ random.shuffle(test_list_insert)
 random.shuffle(test_list_delete)
 #test_list.reverse()
 for i in test_list_insert:
-    f.write("i " + str(i) + " test wow perfect asdf " + str(i) + "\n")
+    f.write("i " + str(i) + " test " + str(i) + "\n")
     #f.write("f " + str(i) + "\n")
     #f.write("d " + str(i) + "\n")
 for i in test_list_delete:
-    #f.write("i " + str(i) + " test wow perfect asdf " + str(i) + "\n")
+    #f.write("i " + str(i) + " test " + str(i) + "\n")
     #f.write("f " + str(i) + "\n")
     f.write("d " + str(i) + "\n")
 for i in test_list_find:
-    #f.write("i " + str(i) + " test wow perfect asdf " + str(i) + "\n")
+    #f.write("i " + str(i) + " test " + str(i) + "\n")
     f.write("f " + str(i) + "\n")
     #f.write("d " + str(i) + "\n")
 f.write("p")
