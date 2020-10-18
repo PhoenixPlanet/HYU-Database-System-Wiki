@@ -116,9 +116,13 @@ Internal node와 Leaf node가 Header은 동일하지만 Body는 다르기 떄문
 
 - 원래 bpt.c에 구현된 내용을 수정하는 방식으로 작성하였다.
 
-- 기존 bpt.c에서는 Leaf 노드의 경우 pointer[order - 1]가 right sibling을 가리키도록 하였고, Internal 노드의 경우 pointer[0]가 left-most child를 가리키도록 되어있었는데, 여기서는 이 둘의 역할을 하는 부분이 따로 있었다. 해당 부분은 node_t를 정의하면서 spare_page라고 이름붙였다.
+- 기존 bpt.c에서는 Leaf 노드의 경우 pointer[order - 1]가 right sibling을 가리키도록 하였고, 
+Internal 노드의 경우 pointer[0]가 left-most child를 가리키도록 되어있었는데, 여기서는 이 둘의 역할을 하는 부분이 따로 있었다. 
+해당 부분은 node_t를 정의하면서 spare_page라고 이름붙였다.
 
-- 기존 bpt.c에서는 pointer와 key를 각각의 배열로 관리하였으나, 여기서는 (key, child), 또는 (key, value)로 묶어 하나의 배열로 관리하고 있으므로 이에 따르는 차이들도 반영해주었다.
+- 기존 bpt.c에서는 pointer와 key를 각각의 배열로 관리하였으나, 
+여기서는 (key, child), 또는 (key, value)로 묶어 하나의 배열로 관리하고 있으므로 
+이에 따르는 차이들도 반영해주었다.
 ```
 ## Insert
 Insert의 경우 기존 bpt.c와 거의 비슷하게 구현하였다.
