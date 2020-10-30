@@ -79,6 +79,8 @@ project2 에서 header page, free page는 page_t 구조체로, B+ Tree의 노드
 # HeaderNode & BPTNode
 ## 구현에 대한 설명
 
+1. page_t의 일종의 wrapper 역할을 하는 클래스로 구현하였다. 
+
 1. pin과 is_dirty 관리의 용이성, 그리고 노드의 데이터 접근의 편의성을 위해 HeaderNode와 BPTNode 클래스를 구현하였다.
 
 2. HeaderNode의 경우 Header page를 불러와, root page nuber을 읽거나 변경할 수 있도록 하였다.
