@@ -63,7 +63,7 @@ project2 에서 header page, free page는 page_t 구조체로, B+ Tree의 노드
 
 4. 위와 같이 구현하면, 한 번 버퍼에 올라온 페이지는 eviction 되거나 table close, 또는 shutdown 등의 이유로 버퍼에서 내려갈 때까지 버퍼 배열의 같은 인덱스에 위치하므로 버퍼 블록의 위치를 찾기가 쉬워진다.
 
-5. STL의 unordered map을 활용하여 (table id, page number)을 키로, 해당하는 버퍼의 블록 인덱스를 value로 가지는 해시 테이블을 만들고, 후에 버퍼 블록을 찾을 때 이 해시 테이블을 사용하도록 하였다. 키가 pair 형태이므로 해시 함수는 [[이곳 | https://stackoverflow.com/questions/5889238/why-is-xor-the-default-way-to-combine-hashes]]을 참조하여 STL의 해시 함수로 구한 두 해시 값을 XOR 하는 방식으로 구현하였다. 
+5. STL의 unordered map을 활용하여 (table id, page number)을 키로, 해당하는 버퍼의 블록 인덱스를 value로 가지는 해시 테이블을 만들고, 후에 버퍼 블록을 찾을 때 이 해시 테이블을 사용하도록 하였다. 키가 pair 형태이므로 해시 함수는 [[이곳 | https://stackoverflow.com/questions/5889238/why-is-xor-the-default-way-to-combine-hashes]] 을 참조하여 STL의 해시 함수로 구한 두 해시 값을 XOR 하는 방식으로 구현하였다. 
 
 </br>
 
