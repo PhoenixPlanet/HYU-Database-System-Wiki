@@ -65,7 +65,7 @@ project2 에서 header page, free page는 page_t 구조체로, B+ Tree의 노드
 
 5. STL의 unordered map을 활용하여 (table id, page number)을 키로, 해당하는 버퍼의 블록 인덱스를 value로 가지는 해시 테이블을 만들고, 후에 버퍼 블록을 찾을 때 이 해시 테이블을 사용하도록 하였다. 키가 pair 형태이므로 해시 함수는 STL의 해시 함수로 구한 두 해시 값을 XOR 하는 방식으로 구현하였다. 
 
-[[해시함수는 이곳을 참조하였다. | https://stackoverflow.com/questions/5889238/why-is-xor-the-default-way-to-combine-hashes]]
+    [[해시함수는 이곳을 참조하였다. | https://stackoverflow.com/questions/5889238/why-is-xor-the-default-way-to-combine-hashes]]
 
 </br>
 
