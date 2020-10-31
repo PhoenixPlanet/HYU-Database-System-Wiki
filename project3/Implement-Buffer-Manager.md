@@ -34,16 +34,12 @@
 ## 구현에 대한 설명
 
 1. project2 에서 file.c에 있던 함수들을 TableFile 클래스로 묶어 file descriptor와 같이 관리하였다. 
-즉, file descriptor를 멤버 변수로 가지고, 기존 file.c의 함수들을 멤버 함수로 가지는 클래스인 TableFile을 정의하였다.
+즉, file descriptor를 멤버 변수로 가지고, 기존 file.c의 함수들을 멤버 함수로 가져 실질적으로 file and disk management layer 역할을 하는 클래스인 TableFile을 정의하였다.
 
-2. project2 에서 DBFileUtils 클래스의 이름을 FileManager로 변경하는 것이 적절하다고 판단하여 변경해주었다. 
+2. project2에서의 DBFileUtils 클래스 역할의 변경에 따라 이름 역시 FileManager로 변경하는 것이 적절하다고 판단하여 변경해주었다. 
 
-3. 파일 Open, Close 등을 수행하며, TableFile 객체를 관리, 상위 레이어의 호출에 따라 
-적절한 TableFile 객체를 찾아 해당 객체의 함수를 호출해주는 등의 역할을 한다. 
-
-4. Table ID의 경우 현재 프로젝트에서 파일과 1 대 1 매칭이 되며, 
-파일 경로와 TableFile 객체 Table ID를 matching하는 작업 등이 필요하므로 
-FileManager 클래스에서 Table ID를 부여, 관리해주는 것이 합당하다고 판단하여 이와 같이 구현하였다.
+3. FileManager은 실질적으로 Table manager의 역할을 하여 TableFile 객체에 Table id 부여 및 관리, 상위 레이어의 호출에 따라 
+적절한 TableFile 객체를 찾아 해당 객체의 함수를 호출해주는 등의 역할을 한다.
 
 </br>
 
@@ -63,7 +59,7 @@ project2 에서 header page, free page는 page_t 구조체로, B+ Tree의 노드
 
 4. 위와 같이 구현하면, 한 번 버퍼에 올라온 페이지는 eviction 되거나 table close, 또는 shutdown 등의 이유로 버퍼에서 내려갈 때까지 버퍼 배열의 같은 인덱스에 위치하므로 버퍼 블록의 위치를 찾기가 쉬워진다.
 
-5. project2에서는 file.h의 API였던 file_alloc_page, file_free_page의 역할을 버퍼매니저에서 일부 담당하도록 하였다. 특히 file_free_page의 경우 delete_node라는 함수로, 기능 전체가 버퍼매니저에서 구현되었다.
+5. project2에서는 file.h의 API였던 file_alloc_page, file_free_page의 역할을 버퍼매니저에서 일부 담당하도록 하였다. file_alloc_page에서는 free page가 없는 경우 free page를 늘려주고, free list의 첫 번째 페이지를 찾아 반환하는 부분만을 담당하도록 하였으며, file_free_page의 경우 file i/o에 관련된 system call이 전혀 발생되지 않고 버퍼에 있는 페이지를 수정하는 부분만 있으므로 delete_node라는 함수로 기능 전체가 버퍼매니저에서 구현되었다.
 
 6. STL의 unordered map을 활용하여 (table id, page number)을 키로, 해당하는 버퍼의 블록 인덱스를 value로 가지는 해시 테이블을 만들고, 후에 버퍼 블록을 찾을 때 이 해시 테이블을 사용하도록 하였다. 키가 pair 형태이므로 해시 함수는 STL의 해시 함수로 구한 두 해시 값을 XOR 하는 방식으로 구현하였다. 
 
