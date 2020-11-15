@@ -5,3 +5,6 @@
 
 # project3
 [[Implement Buffer Manager | project3/Implement Buffer Manager]]
+
+# project4
+[[Implement Lock Table | project4/Implement Lock Table]]
