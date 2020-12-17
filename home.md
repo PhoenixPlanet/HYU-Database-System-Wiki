@@ -11,3 +11,6 @@
 
 # project5
 [[Concurrency Control | project5/Concurrency Control]]
+
+# project6
+[[Recovery | project6/Recovery]]
